@@ -27,12 +27,21 @@ let fruits = JSON.parse(fruitsJSON);
 
 // отрисовка карточек
 const display = () => {
-  // TODO: очищаем fruitsList от вложенных элементов,
-  // чтобы заполнить актуальными данными из fruits
-
+  fruitsList.innerHTML = "";
   for (let i = 0; i < fruits.length; i++) {
-    // TODO: формируем новый элемент <li> при помощи document.createElement,
-    // и добавляем в конец списка fruitsList при помощи document.appendChild
+    var cardText = document.createElement('li');
+    cardText.innerHTML = `Фрукт №${i+1}`+ `<br>` + fruits[i].kind +`<br>`+ fruits[i].color +`<br>`+ `Вес: ${fruits[i].weight}кг`;
+    function colorOutput(color, typeColor){
+      if (fruits[i].color == color) {
+      cardText.className = typeColor;
+      }
+    };
+    colorOutput("фиолетовый", "fruit__item fruit_violet");
+    colorOutput("зеленый", "fruit__item fruit_green");
+    colorOutput("розово-красный", "fruit__item fruit_carmazin");
+    colorOutput("желтый", "fruit__item fruit_yellow");
+    colorOutput("светло-коричневый", "fruit__item fruit_lightbrown");    
+    fruitsList.appendChild(cardText);
   }
 };
 
@@ -49,18 +58,17 @@ const getRandomInt = (min, max) => {
 // перемешивание массива
 const shuffleFruits = () => {
   let result = [];
-
-  // ATTENTION: сейчас при клике вы запустите бесконечный цикл и браузер зависнет
+  const  fruits_old  = [...fruits];
   while (fruits.length > 0) {
-    // TODO: допишите функцию перемешивания массива
-    //
-    // Подсказка: находим случайный элемент из fruits, используя getRandomInt
-    // вырезаем его из fruits и вставляем в result.
-    // ex.: [1, 2, 3], [] => [1, 3], [2] => [3], [2, 1] => [], [2, 1, 3]
-    // (массив fruits будет уменьшатся, а result заполняться)
+    let j = getRandomInt(0, fruits.length-1); 
+    result.push(fruits[j]); 
+    fruits.splice(j,1); 
   }
-
   fruits = result;
+  const not_shuffled = fruits.every((element, index) =>  element == fruits_old[index]);
+  if (not_shuffled) {
+    alert("Порядок не изменился!")
+  };
 };
 
 shuffleButton.addEventListener('click', () => {
@@ -68,19 +76,11 @@ shuffleButton.addEventListener('click', () => {
   display();
 });
 
+ 
+
 /*** ФИЛЬТРАЦИЯ ***/
 
 // фильтрация массива
-const filterFruits = () => {
-  fruits.filter((item) => {
-    // TODO: допишите функцию
-  });
-};
-
-filterButton.addEventListener('click', () => {
-  filterFruits();
-  display();
-});
 
 /*** СОРТИРОВКА ***/
 
